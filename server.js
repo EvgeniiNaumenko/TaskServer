@@ -6,24 +6,6 @@ app.use(cors());
 app.use(express.json()); 
 
 let tasks = [
-    {
-        id: "1",
-        title: "Подготовиться к встрече",
-        description: "Составить список вопросов.",
-        createdAt: new Date(),
-        status: "Active",
-        isArchived: false,
-        tags: ["работа"],
-    },
-    {
-        id: "2",
-        title: "Купить продукты",
-        description: "Молоко, хлеб, овощи.",
-        createdAt: new Date(),
-        status: "Active",
-        isArchived: false,
-        tags: ["дом"],
-    },
 ];
 
 app.get("/tasks", (req, res) => {
