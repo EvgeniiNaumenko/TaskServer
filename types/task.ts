@@ -7,8 +7,8 @@ export type Task = {
     status: TaskStatus;
     finalizedAt?: string | null;
     isArchived: boolean;
-    tags: string[];
-    // options?: TaskAppearanceOptions;
+    tags: string[] | null;
+    options?: TaskAppearanceOptions;
 };
 
 export enum TaskStatus {
@@ -16,3 +16,7 @@ export enum TaskStatus {
     Completed = "Выполнено",
     Deleted = "Удалено",
 }
+
+export type TaskAppearanceOptions = {
+    backgroundColor?: string;
+};

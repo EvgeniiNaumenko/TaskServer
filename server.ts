@@ -81,7 +81,7 @@ app.get("/api/tasks/archive", (req, res) => {
 });
 
 app.post("/api/tasks", (req, res) => {
-    const { title, description, tags } = req.body;
+    const { title, description, tags, options } = req.body;
 
     const newTask: Task = {
         id: String(tasks.length + 1),
@@ -91,7 +91,8 @@ app.post("/api/tasks", (req, res) => {
         lastModifiedAt: null,
         status: TaskStatus.InProgress,
         isArchived: false,
-        tags: tags ? tags.split(",").map((tag: string) => tag.trim()) : [],
+        tags,
+        options,
     };
 
     tasks.push(newTask);
@@ -100,7 +101,7 @@ app.post("/api/tasks", (req, res) => {
 
 app.put("/api/tasks/:id", (req, res) => {
     const { id } = req.params;
-    const { title, description, status, isArchived, tags } = req.body;
+    const { title, description, status, isArchived, tags, options } = req.body;
 
     const taskIndex: number = tasks.findIndex((task) => task.id === id);
     if (taskIndex === -1) {
@@ -111,15 +112,15 @@ app.put("/api/tasks/:id", (req, res) => {
 
     const hasTitleChanged: boolean = title && title !== task.title;
     const hasDescriptionChanged: boolean = description && description !== task.description;
-    const hasTagsChanged: boolean =
-        tags && tags.split(",").map((tag: string) => tag.trim()).join(",") !== task.tags.join(",");
+    const hasTagsChanged: boolean = tags && (tags.length !== task.tags.length || tags.some((tag: string, index: number) => tag !== task.tags[index]));
 
     const updatedTask: Task = {
         ...task,
         title: title || task.title,
         description: description || task.description,
         isArchived: isArchived !== undefined ? isArchived : task.isArchived,
-        tags: tags ? tags.split(",").map((tag: string) => tag.trim()) : task.tags,
+        tags: tags || task.tags,
+        options: options || task.options
     };
 
     if (hasTitleChanged || hasDescriptionChanged || hasTagsChanged) {
